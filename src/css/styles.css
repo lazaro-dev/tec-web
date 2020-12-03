@@ -1,0 +1,220 @@
+*,
+*::after,
+*::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 70%;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    background: linear-gradient(to right, #EAEAEA, #DBDBDB, #F2F2F2, #dbdbd9);
+}
+
+main {
+    display: grid;
+    grid-template-columns: [full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content,16rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end];
+    grid-template-rows: 25rem min-content;
+}
+
+.control {
+    grid-column: full-start / full-end;
+    background-image:linear-gradient(to top, #0f2027, #203a43, #2c5364) ,url(../card.jpg);
+    background-blend-mode: multiply;
+    backdrop-filter: blur(2213px);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control__container {
+    width: 35%;
+    text-align: center;
+}
+
+.controll__balance {
+    margin-bottom: 5rem;
+}
+
+.control__third {
+    font-size: 3.5rem;
+    color: white;
+}
+
+.control__second {
+    color: white;
+    font-size: 5rem;
+}
+
+.control__box {
+    background-color: #ecf0f1;
+    padding: 1.5rem 0;
+    opacity: .6;
+    border-radius: 3px;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    font-size: 1.6rem;
+}
+
+/* INSERT */
+
+.insert {
+    grid-column: full-start / full-end;
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+}
+
+.insert__form {
+    width: 80rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.insert__select,
+.insert__text,
+.insert__date {
+    background-color: #ecf0f1;
+    border: 1px solid transparent;
+}
+
+.insert__date,
+.insert__submit,
+.insert__select {
+    padding: 1rem;
+    cursor: pointer;  
+    font-size: 1.5rem;  
+}
+
+.insert__submit:focus ,
+.insert__select:focus ,
+.insert__text:focus,
+.insert__date:focus {
+    outline: none;
+    border-radius: 3px;
+    border: 1px solid #14d38d;
+}
+
+.insert__text {
+    padding: 1rem 1.3rem;
+    width: 40rem;
+    font-size: 1.5rem;  
+}
+
+.insert__text::-webkit-input-placeholder {
+    color: black;
+}
+
+.insert__submit {
+    border: none;
+    
+    color: white;
+    transition: all .3s;
+}
+
+.focus__Red:focus {
+    border: 1px solid #FF5049;
+}
+
+.insert__submit--red {
+    background-color: #FF5049;
+}
+
+
+.insert__submit--red:hover,.insert__submit:active {
+    background-color: #c53631;
+}
+
+/* FINANCE */
+.finance {
+    grid-column: col-start 2 / col-end 7;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+
+.finance__container {
+    padding: 1rem 2rem;
+    display: grid;
+    grid-template-rows: 7rem;
+    background-color: rgba(255, 255, 255, 0.575);
+}
+
+.finance__second {
+    font-size: 2.5rem;
+}
+
+tbody {
+    font-size: 1.6rem;
+}
+
+.finance__delete {
+    width: 2.3rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all .3s;
+    border: none;
+}
+
+.finance__delete:focus {
+    outline: none;
+}
+
+/* AUXILIARES */
+
+.margin-right--small {
+    margin-right: 2rem;
+}
+
+@media only screen and (max-width:68.75em) {
+    .finance {
+        grid-column: center-start / center-end;
+    }
+
+    html {
+        font-size: 50%;
+    }
+
+    .insert__form  {
+        width: 90rem;
+    }
+}
+
+@media only screen and (max-width:53.125em) {
+    .finance {
+        grid-column: full-start / full-end;
+    }
+
+    .insert__form  {
+        width: 100% 
+    }
+}
+
+@media only screen and (max-width:45em) {
+    .finance {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .margin-right--small {
+        margin-right: 0;
+    }
+
+    .finance__container:not(:last-child) {
+        margin-bottom: 4rem;
+    }
+
+    .insert__text {
+        width: 30%;
+    }
+}
