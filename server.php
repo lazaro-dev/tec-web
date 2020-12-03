@@ -15,6 +15,14 @@
 
     if($op == 'read'){
         $result = $conn->query('select * from users')->fetch_all();
-        var_dump($result);
+        // dd($result);
+        echo json_encode($result);
+    }
+
+    $conn->close();
+    
+    function dd(...$var):void
+    {
+        var_dump($var);
         die;
     }
