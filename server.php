@@ -13,7 +13,6 @@
 
     if($op == 'read'){
 
-       
         $result['credito'] = $conn->query("SELECT id, descricao, data, valor, tipo_lancamento 
                                 FROM contas 
                                 WHERE tipo_lancamento = 1");
@@ -38,6 +37,22 @@
         
         $sql = "INSERT INTO contas (tipo_lancamento, descricao, valor, data)
         VALUES ('{$_POST['tipo_lancamento']}', '{$_POST['descricao']}', '{$_POST['valor']}', '{$_POST['data']}')"; 
+        
+        if ($conn->query($sql)) {
+            $result['status'] = 200;
+            $result['message'] = 'Success';
+        } else {            
+            $result['status'] = 500;
+            $result['message'] = 'Fail2';
+        }
+        
+        echo json_encode($result);
+    }
+
+    if($op == 'update'){
+        
+        $sql = "UPDATE contas SET tipo_lancamento='{$_POST['tipo_lancamento']}', descricao='{$_POST['descricao']}', 
+                valor='{$_POST['valor']}', data='{$_POST['data']}' WHERE id = '{$_POST['id']}'"; 
         
         if ($conn->query($sql)) {
             $result['status'] = 200;
