@@ -8,9 +8,11 @@
         <link rel="stylesheet" href="css/styles.css">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>    
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
-        <main>
+        <main id="root">
             <section class="control">
                 <div class="control__container">
                     <div class="controll__balance">
@@ -53,22 +55,10 @@
                     <table class="table m-0">
                         <tbody>
                             <!-- CONTAINER INFORMAÇÃO -->
-                            <tr>
-                                <th scope="row">25/09/1998</th>
-                                <td>marcus</td>
-                                <td>R$ 1200</td>
-                                <td>
-                                    <form action="">
-                                        <input type="submit" value="X" class="finance__delete btn-danger">
-                                    </form>
-                                </td>
-                            </tr>
-
-                            <!-- CONTAINER INFORMAÇÃO -->
-                            <tr>
-                                <th scope="row">25/09/1998</th>
-                                <td>marcus</td>
-                                <td>R$ 1200</td>
+                            <tr v-for="deb in debitos">
+                                <th scope="row">{{deb.data}}</th>
+                                <td>{{deb.descricao}}</td>
+                                <td>{{deb.valor}}</td>
                                 <td>
                                     <form action="">
                                         <input type="submit" value="X" class="finance__delete btn-danger">
@@ -79,15 +69,15 @@
                     </table>
                 </div>
 
-                <div class="finance__container">
+                <div class="finance__container" >
                     <h2 class="finance__second text-danger">Debito</h2>
                     <div class="table-responsive">
                         <table class="table m-0">
                             <tbody>
-                                <tr>
-                                    <th scope="row">25/09/1998</th>
-                                    <td>marcus</td>
-                                    <td>R$ 1200</td>
+                                <tr v-for="cred in creditos">
+                                    <th scope="row">{{cred.data}}</th>
+                                    <td>{{cred.descricao}}</td>
+                                    <td>{{cred.valor}}</td>
                                     <td>
                                         <form action="">
                                             <input type="submit" value="X" class="finance__delete btn-danger">
@@ -102,6 +92,35 @@
             </section>
         </main>
     </body>
+    <script>
+         var app = new Vue({
+            el: '#root',
+            data: {
+                lancamento: { id: 0, descricao: "", data: "", valor: 0, tipo_lancamento: 0 },
+                creditos: [],
+                debitos: [],
+            },
 
+            methods: {
+                contas(){
+                    axios.get('./../server.php', { params: {op: 'read'}})
+                    .then(res => {
+                        if(res.data.status === 200){
+                            this.creditos = res.data.credito;
+                            this.debitos = res.data.debito;
+                        }else{
+                            console.log('Status: '+ res.data.status + ' Message: ' + res.data.message );
+                        }
+                        console.log(res);
+                    })
+                    .catch( err => {
+                        console.log(err);
+                    });
+                }
+            }
+        })
+
+        app.contas();
+    </script>
     <script src="script.js"></script>
 </html>
