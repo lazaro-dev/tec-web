@@ -62,6 +62,9 @@
                                 <td>{{deb.descricao}}</td>
                                 <td>{{deb.valor}}</td>
                                 <td>
+                                    <button class="finance__link btn-primary"></button>
+                                </td>
+                                <td>
                                     
                                     <input type="submit" value="X" class="finance__delete btn-danger" @click="deleteLancamento(deb.id)">
                                     
@@ -80,6 +83,9 @@
                                     <th scope="row">{{cred.data}}</th>
                                     <td>{{cred.descricao}}</td>
                                     <td>{{cred.valor}}</td>
+                                    <td>
+                                        <button class="finance__link btn-primary"></button>
+                                    </td>
                                     <td>                                        
                                         <input type="submit" value="X" class="finance__delete btn-danger" @click="deleteLancamento(cred.id)">                                        
                                     </td>
