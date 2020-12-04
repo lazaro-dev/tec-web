@@ -33,13 +33,15 @@
             <section class="insert">
                 <form action="" class="insert__form">
                     <select name="" id="" class="insert__select" onchange="alterarCor()">
-                        <option value="+" selected>+</option>
-                        <option value="-">-</option>
+                        <option value="Credito" selected>Credito</option>
+                        <option value="Debito">Debito</option>
                     </select>
                     
                     <input type="date" class="insert__date">
 
                     <input type="text" class="insert__text" pattern="(?=.*\d)(?=.*[a-z])" title="Somente Numeros" placeholder="adicionar valor">
+
+                    <input type="text" class="insert__text" placeholder="Descrição">
 
                     <input type="submit" value="Adicionar" class="insert__submit btn-success">
                 </form>
