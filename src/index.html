@@ -33,20 +33,22 @@
             </section>
 
             <section class="insert">
-                <form action="" class="insert__form">
-                    <select name="" id="" class="insert__select" onchange="alterarCor()">
-                        <option value="Credito" selected>Credito</option>
-                        <option value="Debito">Debito</option>
+                <!-- <form action="" class="insert__form"> -->
+                    <select name="tipo_lancamento" id="" class="insert__select" onchange="alterarCor()" v-model="lancamento.tipo_lancamento">
+                        <option value="1" selected>Credito</option>
+                        <option value="2">Debito</option> 
                     </select>
                     
-                    <input type="date" class="insert__date">
+                    <input type="hidden" name="id" v-model="lancamento.id">
 
-                    <input type="text" class="insert__text" pattern="(^[0-9]+?(.|,[0-9]+)$)" title="Somente Numeros" placeholder="adicionar valor">
+                    <input type="date" class="insert__date" name="data" v-model="lancamento.data">
 
-                    <input type="text" class="insert__text" placeholder="Descrição">
+                    <input type="text" class="insert__text" pattern="(^[0-9]+?(.|,[0-9]+)$)" title="Somente Numeros" placeholder="adicionar valor" name="valor" v-model="lancamento.valor">
 
-                    <input type="submit" value="Adicionar" class="insert__submit btn-success">
-                </form>
+                    <input type="text" class="insert__text" placeholder="Descrição" name="descricao" v-model="lancamento.descricao">
+
+                    <input type="submit" value="Adicionar" class="insert__submit btn-success" @click="createLancamento()">
+                <!-- </form> -->
             </section>
             <section class="finance">
                 <div class="finance__container margin-right--small">
@@ -60,9 +62,9 @@
                                 <td>{{deb.descricao}}</td>
                                 <td>{{deb.valor}}</td>
                                 <td>
-                                    <form action="">
-                                        <input type="submit" value="X" class="finance__delete btn-danger">
-                                    </form>
+                                    
+                                    <input type="submit" value="X" class="finance__delete btn-danger" @click="deleteLancamento(deb.id)">
+                                    
                                 </td>
                             </tr>
                         </tbody>
@@ -78,10 +80,8 @@
                                     <th scope="row">{{cred.data}}</th>
                                     <td>{{cred.descricao}}</td>
                                     <td>{{cred.valor}}</td>
-                                    <td>
-                                        <form action="">
-                                            <input type="submit" value="X" class="finance__delete btn-danger">
-                                        </form>
+                                    <td>                                        
+                                        <input type="submit" value="X" class="finance__delete btn-danger" @click="deleteLancamento(cred.id)">                                        
                                     </td>
                                 </tr>
                             </tbody>
@@ -102,7 +102,7 @@
             },
 
             methods: {
-                contas(){
+                getLancamentos(){
                     axios.get('./../server.php', { params: {op: 'read'}})
                     .then(res => {
                         if(res.data.status === 200){
@@ -110,17 +110,52 @@
                             this.debitos = res.data.debito;
                         }else{
                             console.log('Status: '+ res.data.status + ' Message: ' + res.data.message );
-                        }
-                        console.log(res);
+                        }                        
                     })
                     .catch( err => {
                         console.log(err);
                     });
-                }
+                },
+                createLancamento(){
+                    let form = new FormData();
+
+                    for(let el in this.lancamento){
+                        form.append(el, this.lancamento[el]);
+                    }
+                    
+                    axios.post('./../server.php', form, { params: {op: 'create'}})
+                    .then(res => {
+                        if(res.data.status === 200){
+                            this.creditos = res.data.credito;
+                            this.debitos = res.data.debito;                            
+                        }else{
+                            console.log('Status: '+ res.data.status + ' Message: ' + res.data.message );
+                        }             
+                       this.getLancamentos();
+                    })
+                    .catch( err => {
+                        console.log(err);
+                    });
+                },
+                deleteLancamento(id){                                                            
+                    axios.delete('./../server.php', { params: {op: 'delete', id: id}})
+                    .then(res => {                        
+                        if(res.data.status === 200){
+                            this.creditos = res.data.credito;
+                            this.debitos = res.data.debito;                            
+                        }else{
+                            console.log('Status: '+ res.data.status + ' Message: ' + res.data.message );
+                        }             
+                       this.getLancamentos();
+                    })
+                    .catch( err => {
+                        console.log(err);
+                    });
+                },
             }
         })
 
-        app.contas();
+        app.getLancamentos();
     </script>
     <script src="script.js"></script>
 </html>
