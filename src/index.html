@@ -10,6 +10,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>    
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     </head>
     <body>
         <main id="root">
@@ -34,8 +37,8 @@
 
             <section class="insert">
                 <!-- <form action="" class="insert__form"> -->
-                    <select name="tipo_lancamento" id="" class="insert__select" onchange="alterarCor()" v-model="lancamento.tipo_lancamento">
-                        <option value="1" selected>Credito</option>
+                    <select name="tipo_lancamento" id="" required class="insert__select" onchange="alterarCor()" v-model="lancamento.tipo_lancamento">                        
+                        <option value="1">Credito</option>
                         <option value="2">Debito</option> 
                     </select>
                     
@@ -43,7 +46,7 @@
 
                     <input type="date" class="insert__date" name="data" v-model="lancamento.data">
 
-                    <input type="text" class="insert__text" pattern="(^[0-9]+?(.|,[0-9]+)$)" title="Somente Numeros" placeholder="adicionar valor" name="valor" v-model="lancamento.valor">
+                    <input id="valor" type="text" class="insert__text" pattern="(^[0-9]+?(.|,[0-9]+)$)" title="Somente Numeros" placeholder="adicionar valor" name="valor" v-model="lancamento.valor" >
 
                     <input type="text" class="insert__text" placeholder="Descrição" name="descricao" v-model="lancamento.descricao">
 
@@ -57,19 +60,18 @@
                     <table class="table m-0">
                         <tbody>
                             <!-- CONTAINER INFORMAÇÃO -->
-                            <tr v-for="deb in debitos">
-                                <th scope="row">{{deb.data}}</th>
-                                <td>{{deb.descricao}}</td>
-                                <td>{{deb.valor}}</td>
+                            <tr v-for="cred in creditos">
+                                <th scope="row">{{cred.data | formatDate}}</th>
+                                <td>{{cred.descricao}}</td>
+                                <td>{{cred.valor | currencyReal}}</td>
                                 <td>
                                     <button class="finance__link btn-primary"></button>
                                 </td>
-                                <td>
-                                    
-                                    <input type="submit" value="X" class="finance__delete btn-danger" @click="deleteLancamento(deb.id)">
-                                    
+                                <td>                                        
+                                    <input type="submit" value="X" class="finance__delete btn-danger" @click="deleteLancamento(cred.id)">                                        
                                 </td>
                             </tr>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -79,15 +81,15 @@
                     <div class="table-responsive">
                         <table class="table m-0">
                             <tbody>
-                                <tr v-for="cred in creditos">
-                                    <th scope="row">{{cred.data}}</th>
-                                    <td>{{cred.descricao}}</td>
-                                    <td>{{cred.valor}}</td>
+                                <tr v-for="deb in debitos">
+                                    <th scope="row">{{deb.data | formatDate}}</th>
+                                    <td>{{deb.descricao}}</td>
+                                    <td>{{deb.valor | currencyReal}}</td>
                                     <td>
                                         <button class="finance__link btn-primary"></button>
                                     </td>
                                     <td>                                        
-                                        <input type="submit" value="X" class="finance__delete btn-danger" @click="deleteLancamento(cred.id)">                                        
+                                        <input type="submit" value="X" class="finance__delete btn-danger" @click="deleteLancamento(deb.id)">                                        
                                     </td>
                                 </tr>
                             </tbody>
@@ -102,7 +104,7 @@
          var app = new Vue({
             el: '#root',
             data: {
-                lancamento: { id: 0, descricao: "", data: "", valor: 0, tipo_lancamento: 0 },
+                lancamento: { id: 0, descricao: "", data: "", valor: "", tipo_lancamento: 1 },
                 creditos: [],
                 debitos: [],
             },
@@ -124,10 +126,10 @@
                 },
                 createLancamento(){
                     let form = new FormData();
-
+                    
                     for(let el in this.lancamento){
                         form.append(el, this.lancamento[el]);
-                    }
+                    }                    
                     
                     axios.post('./../server.php', form, { params: {op: 'create'}})
                     .then(res => {
@@ -158,10 +160,22 @@
                         console.log(err);
                     });
                 },
+
+             
+            },
+            filters: {
+                currencyReal(value) {
+                    return 'R$ ' + value.replace('.', ',')
+                },
+                formatDate(value) {                    
+                    let el = value.replace(/-/g, '/').split("/");
+                    return el[2] + '/' + el[1] + '/' + el[0];
+                }
             }
         })
 
         app.getLancamentos();
+       
     </script>
     <script src="script.js"></script>
 </html>
