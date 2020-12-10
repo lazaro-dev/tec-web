@@ -16,6 +16,7 @@
         $result['credito'] = $conn->query("SELECT id, descricao, data, valor, tipo_lancamento 
                                 FROM contas 
                                 WHERE tipo_lancamento = 1");
+                                
         $result['debito'] = $conn->query("SELECT id, descricao, data, valor, tipo_lancamento 
                                 FROM contas 
                                 WHERE tipo_lancamento = 2");
@@ -23,11 +24,11 @@
         if($result['credito'] &&$result['credito']->num_rows>0 || $result['debito'] &&$result['debito']->num_rows>0 ){
             $result['credito'] = $result['credito']->fetch_all(MYSQLI_ASSOC);
             $result['debito']  = $result['debito']->fetch_all(MYSQLI_ASSOC);
-            $result['status']  = 200;
+            $result['status']  = 'ok';
             $result['message'] = 'Success';
         }else{
-            $result['status'] = 500;
-            $result['message'] = 'Fail';
+            $result['status'] = 'error';
+            $result['message'] = 'Sem dados';
         }
         
         echo json_encode($result);
@@ -39,11 +40,11 @@
         VALUES ('{$_POST['tipo_lancamento']}', '{$_POST['descricao']}', '{$_POST['valor']}', '{$_POST['data']}')"; 
         
         if ($conn->query($sql)) {
-            $result['status'] = 200;
+            $result['status'] = 'ok';
             $result['message'] = 'Success';
         } else {            
-            $result['status'] = 500;
-            $result['message'] = 'Fail2';
+            $result['status'] = 'error';
+            $result['message'] = 'Fail';
         }
         
         echo json_encode($result);
@@ -55,11 +56,11 @@
                 valor='{$_POST['valor']}', data='{$_POST['data']}' WHERE id = '{$_POST['id']}'"; 
         
         if ($conn->query($sql)) {
-            $result['status'] = 200;
+            $result['status'] = 'ok';
             $result['message'] = 'Success';
         } else {            
-            $result['status'] = 500;
-            $result['message'] = 'Fail2';
+            $result['status'] = 'error';
+            $result['message'] = 'Fail';
         }
         
         echo json_encode($result);
@@ -71,11 +72,11 @@
         
         
         if ($conn->query($sql)) {
-            $result['status'] = 200;
+            $result['status'] = 'ok';
             $result['message'] = 'Success';
         } else {            
-            $result['status'] = 500;
-            $result['message'] = 'Fail2';
+            $result['status'] = 'error';
+            $result['message'] = 'Fail';
         }
         
         echo json_encode($result);
